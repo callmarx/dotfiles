@@ -4,8 +4,8 @@ call plug#begin('~/.vim/plugged')
 " Declare the list of plugins.
 " Plug 'amiralies/coc-elixir', {'do': 'yarn install && yarn prepack'}
 " Plug 'gasparch/vim-elixir-fold'
-" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 " Plug 'suan/vim-instant-markdown'
+" Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py' }
 " Plug 'Yggdroot/indentLine'
 
 Plug 'airblade/vim-gitgutter'
@@ -17,6 +17,7 @@ Plug 'gabrielelana/vim-markdown'
 Plug 'junegunn/fzf.vim'
 Plug 'junegunn/seoul256.vim'
 Plug 'morhetz/gruvbox'
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'pangloss/vim-javascript'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
@@ -31,14 +32,13 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ycm-core/YouCompleteMe'
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
 "" Replace for https://github.com/terryma/vim-multiple-cursors
 "" Source: https://medium.com/@schtoeffel/you-don-t-need-more-than-one-cursor-in-vim-2c44117d51db
-" search for a word you want to change and the change the next found occurrence
+" search for a word you want to replace and change the next found occurrence
 " with 'cgn' once and then use vim’s most powerful command the '.' (dot).
 " Using . you can apply the change to the next word or skip one word with 'n'
 " which will jump to the next word.
@@ -59,10 +59,6 @@ set clipboard+=unnamedplus
 " visual
 vnoremap > >gv
 vnoremap < <gv
-
-" Preview Image. It uses the Python Imaging Library (pip install Pillow) to
-" render the ASCII image
-au BufRead *.png,*.jpg,*.jpeg :call DisplayImage()
 
 "Configurações para vim-devicons, NerdFonts e vim-airline
 set encoding=UTF-8
