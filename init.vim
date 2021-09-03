@@ -79,9 +79,9 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 let NERDTreeShowHidden=1
 " --> disable NERDTree help text
 let NERDTreeMinimalUI=1
-" --> command: SHIFT+n => shortcut to open/close NERDTree
-map <S-n> :NERDTreeToggle<CR>
-" --> command: '\t' => go to NERDTree buffer
+" --> command: '\'+'n' => shortcut to open/close NERDTree
+nnoremap <leader>n :NERDTreeToggle<CR>
+" --> command: '\'+'t' => go to NERDTree buffer
 nnoremap <leader>t :NERDTreeFocus<cr>
 
 "" Buffers And Windows:
