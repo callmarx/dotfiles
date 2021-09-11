@@ -4,7 +4,6 @@ call plug#begin('~/.vim/plugged')
 " Declare the list of plugins.
 " Plug 'amiralies/coc-elixir', {'do': 'yarn install && yarn prepack'}
 " Plug 'gasparch/vim-elixir-fold'
-" Plug 'suan/vim-instant-markdown'
 " Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py' }
 " Plug 'Yggdroot/indentLine'
 
@@ -15,7 +14,6 @@ Plug 'elzr/vim-json'
 Plug 'gabesoft/vim-ags'
 Plug 'gabrielelana/vim-markdown'
 Plug 'junegunn/fzf.vim'
-Plug 'junegunn/seoul256.vim'
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'pangloss/vim-javascript'
@@ -26,6 +24,7 @@ Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'ryanoasis/vim-devicons'
 Plug 'slashmili/alchemist.vim'
 Plug 'thaerkh/vim-indentguides'
+Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
 Plug 'tpope/vim-sensible'
@@ -51,7 +50,7 @@ autocmd FileType md,markdown,rst,text,yaml, setlocal spell spelllang=pt,en
 highlight ColorColumn ctermbg=gray
 set colorcolumn=100
 
-""Copying to Clipboard:
+"" Copying And Clipboard:
 " Install xclip: sudo pacman -S xclip
 set clipboard=unnamedplus
 
@@ -85,7 +84,7 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>t :NERDTreeFocus<cr>
 
 "" Buffers And Windows:
-" --> comand: '\q' => Close the buffer without closing the window (does not close your :split)
+" --> command: '\q' => Close the buffer without closing the window (does not close your :split)
 nnoremap <leader>q :bp<cr>:bd #<cr>
 " --> command: TAB => Walk over the listed buffers
 nnoremap <Tab> :bnext<CR>
@@ -93,16 +92,14 @@ nnoremap <Tab> :bnext<CR>
 nnoremap <S-Tab> :bprevious<CR>
 
 "" Gruvbox:
+" About italics (https://github.com/morhetz/gruvbox/wiki/Terminal-specific#1-italics-is-disabled):
+" Most terminals don't handle italics right so gruvbox disables italics for terminals by default.
+" But if you're using urxvt or gnome-terminal you should try setting 'let g:gruvbox_italic=1'
+" before 'colorscheme' gruvbox to enforce displaying italics
 let g:gruvbox_italic=1
+let g:gruvbox_contrast_dark='medium'
 colorscheme gruvbox
 set background=dark
-let g:gruvbox_contrast_dark='hard'
-
-" Vim-instant-markdown:
-filetype plugin on
-let g:instant_markdown_slow = 1
-let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
-let g:instant_markdown_autoscroll = 0
 
 "" Disable quote concealing in JSON files
 let g:vim_json_syntax_conceal = 0
@@ -123,6 +120,30 @@ autocmd FileType javascript set formatprg=prettier\ --stdin
 nnoremap <c-p> :Files<cr>
 " --> command: CTRL+f => shortcut for :Ag (search inside files)
 nnoremap <c-f> :Ag<cr>
+
+"" Fugitive:
+" --> command: '\ga' =>  Same as 'git add -A'
+noremap <Leader>ga :Git add -A<CR>
+" --> command: '\gc' =>  Opens a COMMIT_EDITMSG same as like 'git commit --verbose' with git.editor
+"  defined.
+noremap <Leader>gc :Git commit --verbose<CR>
+" --> command: '\gsh' =>  Same as 'git push'
+noremap <Leader>gsh :Git push<CR>
+" --> command: '\gll' =>  Same as 'git pull'
+noremap <Leader>gll :Git pull<CR>
+" --> command: '\gs' =>  Same as 'git status'
+noremap <Leader>gs :Git<CR>
+" --> command: '\gb' => Opens a temporary buffer with maps for additional triage. Press enter on a
+"  line to view the commit where the line changed, or 'g?' to see other available maps. Omit the
+"  filename argument will be blame the currently edited file in a vertical split
+noremap <Leader>gb :Git blame<CR>
+" --> command: '\gd' => Opens a staged version of the file side by side with the working tree
+"  version. Use Vim's diff handling capabilities to apply changes to the staged version, and write
+"  that buffer to stage the changes. You can also give an arbitrary ':Gedit' argument to diff
+"  against older versions of the file
+noremap <Leader>gd :Gvdiff<CR>
+" " --> command: '\gr' => same as 'git rm' on the current file but leaves the empty buffer open
+" noremap <Leader>gr :Git remove<CR>
 
 "" Vim-javascript
 let g:javascript_plugin_jsdoc = 1
