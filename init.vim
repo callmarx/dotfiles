@@ -13,6 +13,7 @@ Plug 'elixir-editors/vim-elixir'
 Plug 'elzr/vim-json'
 Plug 'gabesoft/vim-ags'
 Plug 'gabrielelana/vim-markdown'
+Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
 Plug 'junegunn/fzf.vim'
 Plug 'morhetz/gruvbox'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -101,6 +102,16 @@ let g:gruvbox_contrast_dark='medium'
 colorscheme gruvbox
 set background=dark
 
+"" Vim-instant-markdown:
+filetype plugin on
+let g:instant_markdown_autostart = 0
+let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
+let g:instant_markdown_autoscroll = 0
+" --> command: '\mp' =>  trigger browser preview
+noremap <Leader>mp :InstantMarkdownPreview<CR>
+" --> command: '\mc' =>  close browser preview
+noremap <Leader>mc :InstantMarkdownStop<CR>
+
 "" Disable quote concealing in JSON files
 let g:vim_json_syntax_conceal = 0
 
@@ -124,8 +135,7 @@ nnoremap <c-f> :Ag<cr>
 "" Fugitive:
 " --> command: '\ga' =>  Same as 'git add -A'
 noremap <Leader>ga :Git add -A<CR>
-" --> command: '\gc' =>  Opens a COMMIT_EDITMSG same as like 'git commit --verbose' with git.editor
-"  defined.
+" --> command: '\gc' =>  Opens a COMMIT_EDITMSG same as 'git commit --verbose' with core.editor
 noremap <Leader>gc :Git commit --verbose<CR>
 " --> command: '\gsh' =>  Same as 'git push'
 noremap <Leader>gsh :Git push<CR>
@@ -133,6 +143,8 @@ noremap <Leader>gsh :Git push<CR>
 noremap <Leader>gll :Git pull<CR>
 " --> command: '\gs' =>  Same as 'git status'
 noremap <Leader>gs :Git<CR>
+" --> command: '\gL' =>  Opens two temporary buffers with detailed commit history
+noremap <Leader>gL :Gclog -- %<CR>
 " --> command: '\gb' => Opens a temporary buffer with maps for additional triage. Press enter on a
 "  line to view the commit where the line changed, or 'g?' to see other available maps. Omit the
 "  filename argument will be blame the currently edited file in a vertical split
@@ -141,9 +153,11 @@ noremap <Leader>gb :Git blame<CR>
 "  version. Use Vim's diff handling capabilities to apply changes to the staged version, and write
 "  that buffer to stage the changes. You can also give an arbitrary ':Gedit' argument to diff
 "  against older versions of the file
-noremap <Leader>gd :Gvdiff<CR>
+noremap <Leader>gd :Gvdiffsplit<CR>
 " " --> command: '\gr' => same as 'git rm' on the current file but leaves the empty buffer open
 " noremap <Leader>gr :Git remove<CR>
+" --> command: '\gD' => Close the :Gvdiffsplit buffer
+nnoremap <Leader>gD <c-w>h<c-w>c
 
 "" Vim-javascript
 let g:javascript_plugin_jsdoc = 1
