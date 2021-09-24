@@ -127,6 +127,8 @@ set number relativenumber
 autocmd FileType javascript set formatprg=prettier\ --stdin
 
 "" Fzf:
+let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
+set grepprg=ag\ --nogroup\ --nocolor
 " --> command: CTRL+p => shortcut for :Files (search for file's name)
 nnoremap <c-p> :Files<cr>
 " --> command: CTRL+f => shortcut for :Ag (search inside files)
@@ -166,7 +168,11 @@ let g:javascript_plugin_flow = 1
 
 
 "" Force ruby syntax for .jb files
-autocmd BufNewFile,BufRead *.jb set syntax=ruby
+"" Force Dockerfile syntax for Dockerfile.* files
+augroup filetypedetect
+  au! BufNewFile,BufRead *.jb setf ruby
+  au! BufNewFile,BufRead Dockerfile.* setf dockerfile
+augroup END
 
 "" Indentation settings:
 " By default, indent with 2 spaces
