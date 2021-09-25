@@ -71,7 +71,7 @@ set undodir=~/.config/nvim/undodir "directory where the undo-files will be saved
 set undofile                       "each file will have its own undo-file
 " as you get near to the bottom or top of the file it starts scroll down/up when 8 lines remain
 set scrolloff=8
-
+" define <space> as map leader
 let mapleader=" "
 " --> command: CTRL+l ==> clear highlighted search
 nnoremap <C-L> :nohls<CR><C-L>
@@ -79,8 +79,10 @@ nnoremap <C-L> :nohls<CR><C-L>
 "" Basic Tips:
 " --> command: CTRL+u   => Moves cursor to 20 lines up
 " --> command: CTRL+d   => Moves cursor to 20 lines down
-" --> command: CTRL+w+o => Close all buffers except the one you are
-" --> command: CTRL+w+r => Rotate your current buffers
+" --> command: CTRL+wo  => Closes all buffers except the one you are
+" --> command: CTRL+wr  => Rotates your current buffers
+" --> command: CTRL+wv  => splits vertical
+" --> command: CTRL+ws  => splits horizontal
 
 "" SpellCheck:
 :set spelllang=pt-BR
@@ -110,15 +112,15 @@ augroup filetypedetect
 augroup END
 
 "" Buffers And Windows:
-" --> command: '\q' => Close the buffer without closing the window (does not close your :split)
+" --> command: <space>+q' => Close the buffer without closing the window (does not close your :split)
 nnoremap <leader>q :bp<CR>:bd #<CR>
 " --> command: TAB => Walk over the listed buffers
 nnoremap <Tab> :bnext<CR>
 " --> command: SHIFT+TAB => Walk backwards over the listed buffers
 nnoremap <S-Tab> :bprevious<CR>
-" --> command: CRTL+TAB => Walk over the tab-pages
-nnoremap <C-Tab> :tabNext<CR>
-" --> command: CRTL+TAB => Walk over the tab-pages
+" --> command: <space>+TAB => Walk over the tab-pages
+nnoremap <leader><tab> :tabNext<CR>
+" --> command: <space>+tc => Walk over the tab-pages
 nnoremap <leader>tc :tabclose<CR>
 
 
@@ -145,9 +147,9 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 let NERDTreeShowHidden=1
 " --> disable NERDTree help text
 let NERDTreeMinimalUI=1
-" --> command: '\'+'n' => shortcut to open/close NERDTree
+" --> command: <space>+N => open/close NERDTree
 nnoremap <leader>N :NERDTreeToggle<CR>
-" --> command: '\'+'t' => go to NERDTree buffer
+" --> command: <space>+n => go to NERDTree buffer
 nnoremap <leader>n :NERDTreeFocus<CR>
 
 "" Gruvbox:
@@ -165,9 +167,9 @@ filetype plugin on
 let g:instant_markdown_autostart = 0
 let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
 let g:instant_markdown_autoscroll = 0
-" --> command: '\mp' =>  trigger browser preview
+" --> command: <space>+mp =>  trigger browser preview
 noremap <leader>mp :InstantMarkdownPreview<CR>
-" --> command: '\mc' =>  close browser preview
+" --> command: <space>+mc =>  close browser preview
 noremap <leader>mc :InstantMarkdownStop<CR>
 
 "" Disable quote concealing in JSON files
@@ -191,32 +193,31 @@ nnoremap <c-f> :Telescope live_grep<CR>
 "" YouCompleteMe:
 " it avoids autocomplete-preview splits on a new buffer
 set completeopt-=preview
+" --> command: <space>+dd =>  go to method/function/class definition (when YCM supports)
 nnoremap <leader>dd :YcmCompleter GoTo<CR>
 
 "" Fugitive:
-" --> command: '\ga' =>  Same as 'git add -A'
+" --> command: <space>+ga =>  Same as 'git add -A'
 nnoremap <leader>ga :tab Git add -A<CR>
-" --> command: '\gc' =>  Opens a COMMIT_EDITMSG same as 'git commit --verbose' with core.editor
+" --> command: <space>+gc =>  Opens a COMMIT_EDITMSG same as 'git commit --verbose' with core.editor
 nnoremap <leader>gc :tab Git commit --verbose<CR>
-" --> command: '\gsh' =>  Same as 'git push'
+" --> command: <space>+gsh =>  Same as 'git push'
 nnoremap <leader>gsh :tab Git push<CR>
-" --> command: '\gll' =>  Same as 'git pull'
+" --> command: <space>+gll =>  Same as 'git pull'
 nnoremap <leader>gll :tab Git pull<CR>
-" --> command: '\gs' =>  Same as 'git status'
+" --> command: <space>+gs =>  Same as 'git status'
 nnoremap <leader>gg :tab Git<CR>
-" --> command: '\gL' =>  Opens two temporary buffers with detailed commit history
+" --> command: <space>+gL =>  Opens two temporary buffers with detailed commit history
 nnoremap <leader>gL :tab Gclog -- %<CR>
-" --> command: '\gb' => Opens a temporary buffer with maps for additional triage. Press enter on a
+" --> command: <space>+gb => Opens a temporary buffer with maps for additional triage. Press enter on a
 "  line to view the commit where the line changed, or 'g?' to see other available maps. Omit the
 "  filename argument will be blame the currently edited file in a vertical split
 nnoremap <leader>gb :tab Git blame<CR>
-" --> command: '\gd' => Opens a staged version of the file side by side with the working tree
+" --> command: <space>+gd => Opens a staged version of the file side by side with the working tree
 "  version. Use Vim's diff handling capabilities to apply changes to the staged version, and write
 "  that buffer to stage the changes. You can also give an arbitrary ':Gedit' argument to diff
 "  against older versions of the file
 nnoremap <leader>gd :Gvdiffsplit<CR>
-" " --> command: '\gr' => same as 'git rm' on the current file but leaves the empty buffer open
-" nnoremap <leader>gr :Git remove<CR>
 
 "" Vim-javascript
 let g:javascript_plugin_jsdoc = 1
