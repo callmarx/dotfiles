@@ -4,7 +4,6 @@ call plug#begin('~/.vim/plugged')
 " Declare the list of plugins.
 " Plug 'amiralies/coc-elixir', {'do': 'yarn install && yarn prepack'}
 " Plug 'gasparch/vim-elixir-fold'
-" Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py' }
 " Plug 'Yggdroot/indentLine'
 
 Plug 'airblade/vim-gitgutter'
@@ -14,9 +13,13 @@ Plug 'elzr/vim-json'
 Plug 'gabesoft/vim-ags'
 Plug 'gabrielelana/vim-markdown'
 Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn install'}
-Plug 'junegunn/fzf.vim'
+" Plug 'junegunn/fzf.vim'
+Plug 'leafgarland/typescript-vim'
 Plug 'morhetz/gruvbox'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'nvim-lua/popup.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
 Plug 'pangloss/vim-javascript'
 Plug 'preservim/nerdcommenter'
 Plug 'preservim/nerdtree'
@@ -28,39 +31,102 @@ Plug 'thaerkh/vim-indentguides'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
-Plug 'tpope/vim-sensible'
-Plug 'tpope/vim-surround'
 Plug 'vim-airline/vim-airline'
 Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --ts-completer' }
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
 
+"" Find And Replace Multiple:
+" search for a word you want to replace (you can press '*' to search forwards word) and change the
+" next found occurrence with 'cgn' once and then use vim’s most powerful command the '.' (dot).
+" Using . you can apply the change to the next word or skip one word with 'n' which will jump to
+" the next word.
 "" Replacement for https://github.com/terryma/vim-multiple-cursors
-" search for a word you want to replace and change the next found occurrence
-" with 'cgn' once and then use vim’s most powerful command the '.' (dot).
-" Using . you can apply the change to the next word or skip one word with 'n'
-" which will jump to the next word.
 "" Source: https://medium.com/@schtoeffel/you-don-t-need-more-than-one-cursor-in-vim-2c44117d51db
 
-"" SpellCheck
-:set spelllang=pt-BR
-autocmd FileType md,markdown,rst,text,yaml, setlocal spell spelllang=pt,en
-
+"" Some Default Config:
+set encoding=UTF-8
 "" Set a gray column to identify when the line reaches 100 characters
 highlight ColorColumn ctermbg=gray
 set colorcolumn=100
-
-"" Copying And Clipboard:
-" Install xclip: sudo pacman -S xclip
+"" Line numbering relative
+set nu relativenumber
+" copying and clipboard. It's needs to install xclip: sudo pacman -S xclip
 set clipboard=unnamedplus
+" allow you to go out of a buffer even if it hasn't saved (requires some extra RAM memory)
+set hidden
+" disables beep (or screen flash) for error messages
+set noerrorbells
+" disables visual line wrap (moving the cursor will scroll horizontally)
+set nowrap
+" disables swap files
+set noswapfile
+" disables backup
+set nobackup
+" storing the undo information in a file. So you can exit Vim, reboot your computer and still
+" undo changes you made. AWESOME!
+set undodir=~/.config/nvim/undodir "directory where the undo-files will be saved
+set undofile                       "each file will have its own undo-file
+" as you get near to the bottom or top of the file it starts scroll down/up when 8 lines remain
+set scrolloff=8
+
+let mapleader=" "
+" --> command: CTRL+l ==> clear highlighted search
+nnoremap <C-L> :nohls<CR><C-L>
+
+"" Basic Tips:
+" --> command: CTRL+u   => Moves cursor to 20 lines up
+" --> command: CTRL+d   => Moves cursor to 20 lines down
+" --> command: CTRL+w+o => Close all buffers except the one you are
+" --> command: CTRL+w+r => Rotate your current buffers
+
+"" SpellCheck:
+:set spelllang=pt-BR
+autocmd FileType md,markdown,rst,text,yaml, setlocal spell spelllang=pt,en
+
+"" Indentation:
+" By default, indent with 2 spaces
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+set expandtab
+
+" Force indentation for some languages to 2 spaces
+autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType coffeescript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType sass setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
+" Make file needs TAB, so unindent it
+autocmd FileType make set noexpandtab
+
+"" Force ruby syntax for .jb files
+"" Force Dockerfile syntax for Dockerfile.* files
+augroup filetypedetect
+  au! BufNewFile,BufRead *.jb setf ruby
+  au! BufNewFile,BufRead Dockerfile.* setf dockerfile
+augroup END
+
+"" Buffers And Windows:
+" --> command: '\q' => Close the buffer without closing the window (does not close your :split)
+nnoremap <leader>q :bp<CR>:bd #<CR>
+" --> command: TAB => Walk over the listed buffers
+nnoremap <Tab> :bnext<CR>
+" --> command: SHIFT+TAB => Walk backwards over the listed buffers
+nnoremap <S-Tab> :bprevious<CR>
+" --> command: CRTL+TAB => Walk over the tab-pages
+nnoremap <C-Tab> :tabNext<CR>
+" --> command: CRTL+TAB => Walk over the tab-pages
+nnoremap <leader>tc :tabclose<CR>
+
 
 "" Shift selection to right (Visual + >) or left (Visual + <) without exiting visual mode
 vnoremap > >gv
 vnoremap < <gv
 
 "" Settings for vim-devicons, NerdFonts and vim-airline
-set encoding=UTF-8
 set guifont=SourceCodePro\ Nerd\ Font\ Regular
 let g:airline_powerline_fonts = 1
 " Enable the list of buffers
@@ -80,17 +146,9 @@ let NERDTreeShowHidden=1
 " --> disable NERDTree help text
 let NERDTreeMinimalUI=1
 " --> command: '\'+'n' => shortcut to open/close NERDTree
-nnoremap <leader>n :NERDTreeToggle<CR>
+nnoremap <leader>N :NERDTreeToggle<CR>
 " --> command: '\'+'t' => go to NERDTree buffer
-nnoremap <leader>t :NERDTreeFocus<cr>
-
-"" Buffers And Windows:
-" --> command: '\q' => Close the buffer without closing the window (does not close your :split)
-nnoremap <leader>q :bp<cr>:bd #<cr>
-" --> command: TAB => Walk over the listed buffers
-nnoremap <Tab> :bnext<CR>
-" --> command: SHIFT+TAB => Walk backwards over the listed buffers
-nnoremap <S-Tab> :bprevious<CR>
+nnoremap <leader>n :NERDTreeFocus<CR>
 
 "" Gruvbox:
 " About italics (https://github.com/morhetz/gruvbox/wiki/Terminal-specific#1-italics-is-disabled):
@@ -108,9 +166,9 @@ let g:instant_markdown_autostart = 0
 let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
 let g:instant_markdown_autoscroll = 0
 " --> command: '\mp' =>  trigger browser preview
-noremap <Leader>mp :InstantMarkdownPreview<CR>
+noremap <leader>mp :InstantMarkdownPreview<CR>
 " --> command: '\mc' =>  close browser preview
-noremap <Leader>mc :InstantMarkdownStop<CR>
+noremap <leader>mc :InstantMarkdownStop<CR>
 
 "" Disable quote concealing in JSON files
 let g:vim_json_syntax_conceal = 0
@@ -120,71 +178,47 @@ let g:vim_json_syntax_conceal = 0
 let g:NERDDefaultAlign = 'left'
 let g:NERDSpaceDelims = 1
 
-"" Line numbering settings:
-set number relativenumber
-
 "" Prettier — An Opinionated Javascript Formatter
 autocmd FileType javascript set formatprg=prettier\ --stdin
 
-"" Fzf:
-let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-set grepprg=ag\ --nogroup\ --nocolor
-" --> command: CTRL+p => shortcut for :Files (search for file's name)
-nnoremap <c-p> :Files<cr>
-" --> command: CTRL+f => shortcut for :Ag (search inside files)
-nnoremap <c-f> :Ag<cr>
+"" Telescope:
+" --> command: CTRL+p => shortcut for :Telescope find_files (search for file's name)
+nnoremap <c-p> :Telescope find_files<CR>
+" --> command: CTRL+f => shortcut for :Telescope live_grep (search inside files)
+" It requires ripgrep: sudo pacman -S ripgrep
+nnoremap <c-f> :Telescope live_grep<CR>
+
+"" YouCompleteMe:
+" it avoids autocomplete-preview splits on a new buffer
+set completeopt-=preview
+nnoremap <leader>dd :YcmCompleter GoTo<CR>
 
 "" Fugitive:
 " --> command: '\ga' =>  Same as 'git add -A'
-noremap <Leader>ga :Git add -A<CR>
+nnoremap <leader>ga :tab Git add -A<CR>
 " --> command: '\gc' =>  Opens a COMMIT_EDITMSG same as 'git commit --verbose' with core.editor
-noremap <Leader>gc :Git commit --verbose<CR>
+nnoremap <leader>gc :tab Git commit --verbose<CR>
 " --> command: '\gsh' =>  Same as 'git push'
-noremap <Leader>gsh :Git push<CR>
+nnoremap <leader>gsh :tab Git push<CR>
 " --> command: '\gll' =>  Same as 'git pull'
-noremap <Leader>gll :Git pull<CR>
+nnoremap <leader>gll :tab Git pull<CR>
 " --> command: '\gs' =>  Same as 'git status'
-noremap <Leader>gs :Git<CR>
+nnoremap <leader>gg :tab Git<CR>
 " --> command: '\gL' =>  Opens two temporary buffers with detailed commit history
-noremap <Leader>gL :Gclog -- %<CR>
+nnoremap <leader>gL :tab Gclog -- %<CR>
 " --> command: '\gb' => Opens a temporary buffer with maps for additional triage. Press enter on a
 "  line to view the commit where the line changed, or 'g?' to see other available maps. Omit the
 "  filename argument will be blame the currently edited file in a vertical split
-noremap <Leader>gb :Git blame<CR>
+nnoremap <leader>gb :tab Git blame<CR>
 " --> command: '\gd' => Opens a staged version of the file side by side with the working tree
 "  version. Use Vim's diff handling capabilities to apply changes to the staged version, and write
 "  that buffer to stage the changes. You can also give an arbitrary ':Gedit' argument to diff
 "  against older versions of the file
-noremap <Leader>gd :Gvdiffsplit<CR>
+nnoremap <leader>gd :Gvdiffsplit<CR>
 " " --> command: '\gr' => same as 'git rm' on the current file but leaves the empty buffer open
-" noremap <Leader>gr :Git remove<CR>
-" --> command: '\gD' => Close the :Gvdiffsplit buffer
-nnoremap <Leader>gD <c-w>h<c-w>c
+" nnoremap <leader>gr :Git remove<CR>
 
 "" Vim-javascript
 let g:javascript_plugin_jsdoc = 1
 let g:javascript_plugin_ngdoc = 1
 let g:javascript_plugin_flow = 1
-
-
-"" Force ruby syntax for .jb files
-"" Force Dockerfile syntax for Dockerfile.* files
-augroup filetypedetect
-  au! BufNewFile,BufRead *.jb setf ruby
-  au! BufNewFile,BufRead Dockerfile.* setf dockerfile
-augroup END
-
-"" Indentation settings:
-" By default, indent with 2 spaces
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
-set expandtab
-" Force indentation for some languages to 2 spaces
-autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType coffeescript setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType sass setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
-" Make file needs TAB, so unindent it
-autocmd FileType make set noexpandtab
