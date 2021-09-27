@@ -104,25 +104,45 @@ autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
 " Make file needs TAB, so unindent it
 autocmd FileType make set noexpandtab
 
-"" Force ruby syntax for .jb files
-"" Force Dockerfile syntax for Dockerfile.* files
+" Force ruby syntax for .jb files
+" Force Dockerfile syntax for Dockerfile.* files
 augroup filetypedetect
   au! BufNewFile,BufRead *.jb setf ruby
   au! BufNewFile,BufRead Dockerfile.* setf dockerfile
 augroup END
 
+"" Custom Functions:
+" Looks for empty for empty and unnamed buffers then close its if find some
+function! CleanNoNameEmptyBuffers()
+  let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val) < 0 && (getbufline(v:val, 1, "$") == [""])')
+  if !empty(buffers)
+    exe 'bd '.join(buffers, ' ')
+  else
+    echo 'No buffer deleted'
+  endif
+endfunction
+
+" Classic function to clean unnecessary white spaces
+function! TrimWhitespace()
+  let l:save = winsaveview()
+  keeppatterns %s/\s\+$//e
+  call winrestview(l:save)
+endfun
+" call this function when you save a file
+autocmd BufWritePre * :call TrimWhitespace()
+
+
 "" Buffers And Windows:
-" --> command: <space>+q' => Close the buffer without closing the window (does not close your :split)
+" --> command: <space>+q => Close the buffer without closing the window (doesn't close your :split)
 nnoremap <leader>q :bp<CR>:bd #<CR>
 " --> command: TAB => Walk over the listed buffers
 nnoremap <Tab> :bnext<CR>
-" --> command: SHIFT+TAB => Walk backwards over the listed buffers
+" --> command: SHIFT+TAB => Walks backwards over the listed buffers
 nnoremap <S-Tab> :bprevious<CR>
-" --> command: <space>+TAB => Walk over the tab-pages
+" --> command: <space>+TAB => Walks over the tab-pages
 nnoremap <leader><tab> :tabNext<CR>
-" --> command: <space>+tc => Walk over the tab-pages
-nnoremap <leader>tc :tabclose<CR>
-
+" --> command: <space>+tc => Closes current tab-page (and delete eventual unnamed empty buffers)
+nnoremap <leader>tc :tabclose<CR>:call CleanNoNameEmptyBuffers()<CR>
 
 "" Shift selection to right (Visual + >) or left (Visual + <) without exiting visual mode
 vnoremap > >gv
@@ -208,7 +228,7 @@ nnoremap <leader>gll :tab Git pull<CR>
 " --> command: <space>+gs =>  Same as 'git status'
 nnoremap <leader>gg :tab Git<CR>
 " --> command: <space>+gL =>  Opens two temporary buffers with detailed commit history
-nnoremap <leader>gL :tab Gclog -- %<CR>
+nnoremap <leader>gL :tabnew<CR>:Gclog<CR>
 " --> command: <space>+gb => Opens a temporary buffer with maps for additional triage. Press enter on a
 "  line to view the commit where the line changed, or 'g?' to see other available maps. Omit the
 "  filename argument will be blame the currently edited file in a vertical split
