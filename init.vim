@@ -16,7 +16,7 @@ Plug 'instant-markdown/vim-instant-markdown', {'for': 'markdown', 'do': 'yarn in
 " Plug 'junegunn/fzf.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'morhetz/gruvbox'
-" Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
@@ -33,10 +33,20 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-rails'
 Plug 'vim-airline/vim-airline'
 Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --ts-completer' }
+" Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 ./install.py --ts-completer' }
 
 " List ends here. Plugins become visible to Vim after this call.
 call plug#end()
+
+"" Basic Tips:
+" --> command: CTRL+u   => Moves cursor to 20 lines up.
+" --> command: CTRL+d   => Moves cursor to 20 lines down.
+" --> command: CTRL+wo  => Closes all buffers except the one you are.
+" --> command: CTRL+wr  => Rotates your current buffers.
+" --> command: CTRL+wv  => Splits vertical.
+" --> command: CTRL+ws  => Splits horizontal.
+" --> command: CTRL+o   => Go back in the 'jump list'. You can see yours with :jumps.
+" --> command: CTRL+i   => Go forward in the 'jump list'.
 
 "" Find And Replace Multiple:
 " search for a word you want to replace (you can press '*' to search forwards word) and change the
@@ -45,47 +55,39 @@ call plug#end()
 " the next word.
 "" Replacement for https://github.com/terryma/vim-multiple-cursors
 "" Source: https://medium.com/@schtoeffel/you-don-t-need-more-than-one-cursor-in-vim-2c44117d51db
+" Note: You can use coc-rename instead
 
 "" Some Default Config:
 set encoding=UTF-8
-"" Set a gray column to identify when the line reaches 100 characters
+"" Set a gray column to identify when the line reaches 100 characters.
 highlight ColorColumn ctermbg=gray
 set colorcolumn=100
-"" Line numbering relative
+"" Line numbering relative.
 set nu relativenumber
-" copying and clipboard. It's needs to install xclip: sudo pacman -S xclip
+" Copying and clipboard. It's needs to install xclip, on Arch Linux: 'sudo pacman -S xclip'.
 set clipboard=unnamedplus
-" allow you to go out of a buffer even if it hasn't saved (requires some extra RAM memory)
+" Allow you to go out of a buffer even if it hasn't saved (requires some extra RAM memory).
 set hidden
-" disables beep (or screen flash) for error messages
+" Disables beep (or screen flash) for error messages.
 set noerrorbells
-" disables visual line wrap (moving the cursor will scroll horizontally)
+" Disables visual line wrap (moving the cursor will scroll horizontally).
 set nowrap
-" disables swap files
+" Disables swap files.
 set noswapfile
-" disables backup
+" Disables backup.
 set nobackup
-" storing the undo information in a file. So you can exit Vim, reboot your computer and still
+" Storing the undo information in a file. So you can exit Vim, reboot your computer and still
 " undo changes you made. AWESOME!
 set undodir=~/.config/nvim/undodir "directory where the undo-files will be saved
 set undofile                       "each file will have its own undo-file
-" as you get near to the bottom or top of the file it starts scroll down/up when 8 lines remain
+" As you get near to the bottom or top of the file it starts scroll down/up when 8 lines remain.
 set scrolloff=8
-" define <space> as map leader
+" Define <space> as map leader.
 let mapleader=" "
-" --> command: CTRL+l ==> clear highlighted search
+" --> command: CTRL+l ==> Clear highlighted search.
 nnoremap <C-L> :nohls<CR><C-L>
 
-"" Basic Tips:
-" --> command: CTRL+u   => Moves cursor to 20 lines up
-" --> command: CTRL+d   => Moves cursor to 20 lines down
-" --> command: CTRL+wo  => Closes all buffers except the one you are
-" --> command: CTRL+wr  => Rotates your current buffers
-" --> command: CTRL+wv  => splits vertical
-" --> command: CTRL+ws  => splits horizontal
-
 "" SpellCheck:
-:set spelllang=pt-BR
 autocmd FileType md,markdown,rst,text,yaml, setlocal spell spelllang=pt,en
 
 "" Indentation:
@@ -95,15 +97,6 @@ set softtabstop=2
 set tabstop=2
 set expandtab
 
-" Force indentation for some languages to 2 spaces
-autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType coffeescript setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType sass setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
-autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
-" Make file needs TAB, so unindent it
-autocmd FileType make set noexpandtab
-
 " Force ruby syntax for .jb files
 " Force Dockerfile syntax for Dockerfile.* files
 augroup filetypedetect
@@ -111,8 +104,18 @@ augroup filetypedetect
   au! BufNewFile,BufRead Dockerfile.* setf dockerfile
 augroup END
 
+" Force indentation for some languages to 2 spaces.
+autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType coffeescript setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType sass setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType dockerfile setlocal ts=2 sts=2 sw=2 expandtab
+" Make file needs TAB, so unindent it.
+autocmd FileType make set noexpandtab
+
 "" Custom Functions:
-" Looks for empty for empty and unnamed buffers then close its if find some
+" Looks for empty for empty and unnamed buffers then close its if find some.
 function! CleanNoNameEmptyBuffers()
   let buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && empty(bufname(v:val)) && bufwinnr(v:val) < 0 && (getbufline(v:val, 1, "$") == [""])')
   if !empty(buffers)
@@ -122,29 +125,31 @@ function! CleanNoNameEmptyBuffers()
   endif
 endfunction
 
-" Classic function to clean unnecessary white spaces
+" Classic function to clean unnecessary white spaces.
 function! TrimWhitespace()
   let l:save = winsaveview()
   keeppatterns %s/\s\+$//e
   call winrestview(l:save)
 endfun
-" call this function when you save a file
+" call this function when you save a file.
 autocmd BufWritePre * :call TrimWhitespace()
 
 
 "" Buffers And Windows:
-" --> command: <space>+q => Close the buffer without closing the window (doesn't close your :split)
+" --> command: <space>+q => Close the buffer without closing the window (doesn't close your :split).
 nnoremap <leader>q :bp<CR>:bd #<CR>
-" --> command: TAB => Walk over the listed buffers
+" --> command: TAB => Walk over the listed buffers.
 nnoremap <Tab> :bnext<CR>
-" --> command: SHIFT+TAB => Walks backwards over the listed buffers
+" --> command: SHIFT+TAB => Walks backwards over the listed buffers.
 nnoremap <S-Tab> :bprevious<CR>
-" --> command: <space>+TAB => Walks over the tab-pages
+" --> command: <space>+TAB => Walks over the tab-pages.
 nnoremap <leader><tab> :tabNext<CR>
 " --> command: <space>+tc => Closes current tab-page (and delete eventual unnamed empty buffers)
+" NOTE: I only use tab-pages for fugitive plugin, so this command is more like a 'exit' to the
+" fugitive features.
 nnoremap <leader>tc :tabclose<CR>:call CleanNoNameEmptyBuffers()<CR>
 
-"" Shift selection to right (Visual + >) or left (Visual + <) without exiting visual mode
+"" Shift selection to right (Visual + >) or left (Visual + <) without exiting visual mode.
 vnoremap > >gv
 vnoremap < <gv
 
@@ -167,16 +172,17 @@ autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in
 let NERDTreeShowHidden=1
 " --> disable NERDTree help text
 let NERDTreeMinimalUI=1
-" --> command: <space>+N => open/close NERDTree
+" --> command: <space>+N => Open/close NERDTree
 nnoremap <leader>N :NERDTreeToggle<CR>
-" --> command: <space>+n => go to NERDTree buffer
+" --> command: <space>+n => Go to NERDTree buffer
 nnoremap <leader>n :NERDTreeFocus<CR>
 
 "" Gruvbox:
-" About italics (https://github.com/morhetz/gruvbox/wiki/Terminal-specific#1-italics-is-disabled):
+" About italics:
 " Most terminals don't handle italics right so gruvbox disables italics for terminals by default.
 " But if you're using urxvt or gnome-terminal you should try setting 'let g:gruvbox_italic=1'
-" before 'colorscheme' gruvbox to enforce displaying italics
+" before 'colorscheme' gruvbox to enforce displaying italics.
+" source: https://github.com/morhetz/gruvbox/wiki/Terminal-specific#1-italics-is-disabled
 let g:gruvbox_italic=1
 let g:gruvbox_contrast_dark='medium'
 colorscheme gruvbox
@@ -187,9 +193,9 @@ filetype plugin on
 let g:instant_markdown_autostart = 0
 let g:instant_markdown_logfile = '/tmp/instant_markdown.log'
 let g:instant_markdown_autoscroll = 0
-" --> command: <space>+mp =>  trigger browser preview
+" --> command: <space>+mp => Trigger browser preview
 noremap <leader>mp :InstantMarkdownPreview<CR>
-" --> command: <space>+mc =>  close browser preview
+" --> command: <space>+mc => Close browser preview
 noremap <leader>mc :InstantMarkdownStop<CR>
 
 "" Disable quote concealing in JSON files
@@ -204,40 +210,91 @@ let g:NERDSpaceDelims = 1
 autocmd FileType javascript set formatprg=prettier\ --stdin
 
 "" Telescope:
-" --> command: CTRL+p => shortcut for :Telescope find_files (search for file's name)
+" --> command: CTRL+p => Shortcut for :Telescope find_files (search for file's name)
 nnoremap <c-p> :Telescope find_files<CR>
-" --> command: CTRL+f => shortcut for :Telescope live_grep (search inside files)
+" --> command: CTRL+f => Shortcut for :Telescope live_grep (search inside files)
 " It requires ripgrep: sudo pacman -S ripgrep
 nnoremap <c-f> :Telescope live_grep<CR>
 
-"" YouCompleteMe:
-" it avoids autocomplete-preview splits on a new buffer
-set completeopt-=preview
-" --> command: <space>+dd =>  go to method/function/class definition (when YCM supports)
-nnoremap <leader>dd :YcmCompleter GoTo<CR>
+" I kept this comment because I'm always replacing YouCompleteMe to Coc.vim and vice versa
+""" YouCompleteMe:
+" " it avoids autocomplete-preview splits on a new buffer
+" set completeopt-=preview
+" " --> command: <space>+dd => Go to method/function/class definition (when YCM supports)
+" nmap <silent> gd :YcmCompleter GoTo<CR>
+
+"" Coc:
+let g:coc_global_extensions = ['coc-solargraph', 'coc-tsserver', 'coc-json']
+
+" Add CoC Prettier if prettier is installed
+if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
+  let g:coc_global_extensions += ['coc-prettier']
+endif
+
+" Add CoC ESLint if ESLint is installed
+if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
+  let g:coc_global_extensions += ['coc-eslint']
+endif
+
+" --> command: gd => Go to method/function/class definition.
+nmap <silent> gd <Plug>(coc-definition)
+" --> command: gy => Go to method/function/class type definition
+"  OBS: Go to the type that defines a symbol. For an instance of a class, this will reveal the
+"  class itself instead of where the instance is defined.
+"  Source: https://medium.com/@nikolalsvk/i-am-looking-inside-the-coc-nvim-documentation-and-what-i-found-is-the-following-518d551eb770
+nmap <silent> gy <Plug>(coc-type-definition)
+" --> command: gi => Go to method/function/class implementation.
+nmap <silent> gi <Plug>(coc-implementation)
+" --> command: gr => Open two buffers to listing files that have one or more references and the
+"  preview of these files.
+nmap <silent> gr <Plug>(coc-references)
+" --> command: <space>+rr => Use coc to rename variable, function, class etc on multiple files.
+nmap <leader>rr <Plug>(coc-rename)
+" --> command: <space>+ac => Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+" --> command: <space>+cf => Apply AutoFix to problem on the current line.
+nmap <leader>cf  <Plug>(coc-fix-current)
+" --> command: <space>+pf => Format current file with your prettier definition.
+nmap <leader>pf   :CocCommand prettier.formatFile<CR>
+" --> command: <space>+cr => Restart coc.
+nnoremap <leader>cr :CocRestart<CR>
+" --> command: <space>+k => Show documentation of method/function/class in a preview window with
+"  the following custom function.
+nnoremap <leader>k :call <SID>show_documentation()<CR>
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
 
 "" Fugitive:
-" --> command: <space>+ga =>  Same as 'git add -A'
+" --> command: <space>+ga => Same as 'git add -A'.
 nnoremap <leader>ga :tab Git add -A<CR>
-" --> command: <space>+gc =>  Opens a COMMIT_EDITMSG same as 'git commit --verbose' with core.editor
+" --> command: <space>+gc => Open a COMMIT_EDITMSG same as 'git commit --verbose' with editor
 nnoremap <leader>gc :tab Git commit --verbose<CR>
-" --> command: <space>+gsh =>  Same as 'git push'
+" --> command: <space>+gsh => Same as 'git push'.
 nnoremap <leader>gsh :tab Git push<CR>
-" --> command: <space>+gll =>  Same as 'git pull'
+" --> command: <space>+gll => Same as 'git pull'.
 nnoremap <leader>gll :tab Git pull<CR>
-" --> command: <space>+gs =>  Same as 'git status'
+" --> command: <space>+gg => Open a temporary buffer with uncommitted files that each can be expand
+"  with '=' to show details (toggling).
 nnoremap <leader>gg :tab Git<CR>
-" --> command: <space>+gL =>  Opens two temporary buffers with detailed commit history
+" --> command: <space>+gL => Open two temporary buffers with detailed commit history.
 nnoremap <leader>gL :tabnew<CR>:Gclog<CR>
-" --> command: <space>+gb => Opens a temporary buffer with maps for additional triage. Press enter on a
-"  line to view the commit where the line changed, or 'g?' to see other available maps. Omit the
-"  filename argument will be blame the currently edited file in a vertical split
+" --> command: <space>+gb => Open a temporary buffer with maps for additional triage. Press enter
+"  on a line to view the commit where the line changed, or 'g?' to see other available maps. Omit
+"  the filename argument will be blame the currently edited file in a vertical split.
 nnoremap <leader>gb :tab Git blame<CR>
-" --> command: <space>+gd => Opens a staged version of the file side by side with the working tree
+" --> command: <space>+gD => Open a staged version of the file side by side with the working tree
 "  version. Use Vim's diff handling capabilities to apply changes to the staged version, and write
 "  that buffer to stage the changes. You can also give an arbitrary ':Gedit' argument to diff
-"  against older versions of the file
-nnoremap <leader>gd :Gvdiffsplit<CR>
+"  against older versions of the file.
+nnoremap <leader>gD :tab Gvdiffsplit<CR>
 
 "" Vim-javascript
 let g:javascript_plugin_jsdoc = 1
