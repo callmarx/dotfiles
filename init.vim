@@ -7,6 +7,7 @@ call plug#begin('~/.vim/plugged')
 " Plug 'Yggdroot/indentLine'
 
 Plug 'airblade/vim-gitgutter'
+Plug 'alvan/vim-closetag'
 Plug 'dense-analysis/ale'
 Plug 'elixir-editors/vim-elixir'
 Plug 'elzr/vim-json'
@@ -105,12 +106,14 @@ augroup filetypedetect
 augroup END
 
 " Force indentation for some languages to 2 spaces.
+autocmd FileType ruby setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType javascript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType coffeescript setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType sass setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType sql setlocal ts=2 sts=2 sw=2 expandtab
 autocmd FileType dockerfile setlocal ts=2 sts=2 sw=2 expandtab
+autocmd FileType typescript setlocal ts=2 sts=2 sw=2 expandtab
 " Make file needs TAB, so unindent it.
 autocmd FileType make set noexpandtab
 
@@ -134,6 +137,10 @@ endfun
 " call this function when you save a file.
 autocmd BufWritePre * :call TrimWhitespace()
 
+"" Nvim Config Shortcut:
+nmap <leader>ve :edit ~/.config/nvim/init.vim<cr>
+nmap <leader>vc :edit ~/.config/nvim/coc-settings.json<cr>
+nmap <leader>vr :source ~/.config/nvim/init.vim<cr>
 
 "" Buffers And Windows:
 " --> command: <space>+q => Close the buffer without closing the window (doesn't close your :split).
@@ -205,6 +212,9 @@ let g:vim_json_syntax_conceal = 0
 " Align comments in selection
 let g:NERDDefaultAlign = 'left'
 let g:NERDSpaceDelims = 1
+
+"" Closetag:
+let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb'
 
 "" Prettier — An Opinionated Javascript Formatter
 autocmd FileType javascript set formatprg=prettier\ --stdin
