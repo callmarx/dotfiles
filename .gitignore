@@ -1,2 +1,2 @@
-/undodir/
-/backupdir/
+**/undodir/**
+**/backupdir/**
