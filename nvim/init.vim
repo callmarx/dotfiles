@@ -75,15 +75,15 @@ call plug#begin('~/.vim/plugged')
 Plug 'gabrielelana/vim-markdown'
 Plug 'leafgarland/typescript-vim'
 
-" Plug 'airblade/vim-gitgutter'
 " Plug 'pangloss/vim-javascript'
 " Plug 'junegunn/fzf.vim'
-" Plug 'elzr/vim-json'
 " Plug 'gabesoft/vim-ags'
 
 " Plug 'alvan/vim-closetag'
 "" Closetag:
 " let g:closetag_filenames = '*.html,*.xhtml,*.phtml,*.erb'
+
+Plug 'elzr/vim-json'                  " source ~/.config/nvim/plugins/json.vim
 
 Plug 'iamcco/markdown-preview.nvim', {'for': 'markdown', 'do': 'yarn install'} " source ~/.config/nvim/plugins/markdown.vim
 
@@ -104,6 +104,7 @@ Plug 'nvim-telescope/telescope.nvim'  " source ~/.config/nvim/plugins/telescope.
 
 Plug 'tpope/vim-fugitive'             " source ~/.config/nvim/plugins/fugitive.vim
 
+Plug 'airblade/vim-gitgutter'
 Plug 'roxma/nvim-yarp'
 Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'slashmili/alchemist.vim'
@@ -134,9 +135,6 @@ nnoremap <leader><tab> :tabNext<CR>
 nnoremap <leader>tc :tabclose<CR>:call CleanNoNameEmptyBuffers()<CR>
 " NOTE: I only use tab-pages for fugitive plugin, so this command is more like a 'exit' to the
 " fugitive features.
-
-"" Disable quote concealing in JSON files
-let g:vim_json_syntax_conceal = 0
 
 "" Prettier — An Opinionated Javascript Formatter
 autocmd FileType javascript set formatprg=prettier\ --stdin
