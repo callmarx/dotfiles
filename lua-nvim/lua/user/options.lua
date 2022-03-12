@@ -33,7 +33,7 @@ local options = {
   wrap = false,                            -- display lines as one long line
   scrolloff = 8,                           -- as you go down or up in lines it automatically scroll at 8 lines
   sidescrolloff = 8,                       -- as you go right or left in the line it automatically scroll horizontally at 8 characters
-  guifont = "monospace:h17",               -- the font used in graphical neovim applications
+  guifont = "SourceCodePro Nerd Font Regular",               -- the font used in graphical neovim applications
 }
 
 vim.opt.shortmess:append "c"
